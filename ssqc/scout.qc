@@ -50,10 +50,8 @@ void () CF_Scout_Dash = {
             self.velocity = v_forward * 540;
             self.velocity_z = 181;
         }
-        
 
         FO_Sound(self, CHAN_BODY, "dash.wav", 1, ATTN_NORM);
-
 }
 
 void () CanisterTouch =
