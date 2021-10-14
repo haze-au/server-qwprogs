@@ -30,9 +30,7 @@ void () CF_Scout_Dash = {
         self.dash_cooldown = time + 1;
         makevectors(self.angles);
         
-        if (scoutdash == 2)
-            
-            
+        if (scoutdash == 2)           
             self.velocity_z = 0; // set to zero to avoid falling speed bonus
             
             float speed = vlen(self.velocity);
