@@ -26,12 +26,36 @@ void () CF_Scout_Dash = {
     // check if dash is allowed in rules and if cooldown has ended
     if (!scoutdash || time < self.dash_cooldown)
         return;
-
+        
         self.dash_cooldown = time + 1;
         makevectors(self.angles);
-        self.velocity = v_forward * 540;
-        self.velocity_z = 181;
+        
+        if (scoutdash == 2)
+            
+            
+            self.velocity_z = 0; // set to zero to avoid falling speed bonus
+            
+            float speed = vlen(self.velocity);
+            if (speed <= 500)   // 10% penalty = 450
+            {
+                self.velocity = v_forward * 450;
+                self.velocity_z = 210 + 110 * (1 - speed / 500); 
+            }
+            else
+            {
+                self.velocity = v_forward * speed * 0.9; // 10% speed penalty
+                self.velocity_z = 210;
+            }     
+        }
+        else   // Original dash default
+        {
+            self.velocity = v_forward * 540;
+            self.velocity_z = 181;
+        }
+        
+
         FO_Sound(self, CHAN_BODY, "dash.wav", 1, ATTN_NORM);
+
 }
 
 void () CanisterTouch =
