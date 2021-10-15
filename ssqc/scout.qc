@@ -26,29 +26,55 @@ void () CF_Scout_Dash = {
     // check if dash is allowed in rules and if cooldown has ended
     if (!scoutdash || time < self.dash_cooldown)
         return;
-        
+
         self.dash_cooldown = time + 1;
         makevectors(self.angles);
-        
-        if (scoutdash == 2)           
-            self.velocity_z = 0; // set to zero to avoid falling speed bonus
-            
-            float speed = vlen(self.velocity);
-            if (speed <= 500)   // 10% penalty = 450
-            {
-                self.velocity = v_forward * 450;
-                self.velocity_z = 210 + 110 * (1 - speed / 500); 
-            }
-            else
-            {
-                self.velocity = v_forward * speed * 0.9; // 10% speed penalty
-                self.velocity_z = 210;
-            }     
-        }
-        else   // Original dash default
+        float speed = vlen(self.velocity);
+        self.velocity_z = 0; // set to zero to avoid falling speed bonus
+
+        switch (scoutdash)
         {
-            self.velocity = v_forward * 540;
-            self.velocity_z = 181;
+            case 2:
+                float scale_z = 210 + 110 * (1 - speed / 500);
+
+                if (self.is_concussed)  // Randomize dash direction for cuss.
+                {
+                    float randomdir = crandom();
+                    if (randomdir <= 0 && randomdir > -0.2)
+                    {
+                        randomdir = -0.2;
+                    }
+                    else if (randomdir > 0 && randomdir < 0.2)
+                    {
+                        randomdir = 0.2;
+                    }
+
+                    if (speed < 450 / 0.75) 
+                        speed = 450;
+                    self.velocity = v_forward * speed * 0.75 + v_right * 200 * crandom();
+                    self.velocity_z = scale_z;
+                } 
+                else if (speed <= 450 / 0.9)   // 10% penalty = 450
+                {
+                    self.velocity = v_forward * 450;
+                    self.velocity_z = scale_z;
+                }
+                else
+                {
+                    self.velocity = v_forward * speed * 0.9; // 10% speed speed penalty
+                    self.velocity_z = 210;
+                }
+                break;
+
+            case 3:
+                self.velocity_z = 210;
+                break;
+
+            default:
+                // FO Original dash
+                self.velocity = v_forward * 540;
+                self.velocity_z = 181;
+                break;
         }
 
         FO_Sound(self, CHAN_BODY, "dash.wav", 1, ATTN_NORM);
