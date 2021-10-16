@@ -29,41 +29,35 @@ void () CF_Scout_Dash = {
 
         self.dash_cooldown = time + 1;
         makevectors(self.angles);
-        float speed = vlen(self.velocity);
-        self.velocity_z = 0; // set to zero to avoid falling speed bonus
 
         switch (scoutdash)
         {
             case 2:
-                float scale_z = 210 + 110 * (1 - speed / 500);
+                self.velocity_z = 0; // set to zero to avoid falling speed bonus
+                float speed    = vlen(self.velocity);
+                float speedcap = 500 / 0.9
+                float scale_z  = 210 + 110 * (1 - speed / speedcap);
 
                 if (self.is_concussed)  // Randomize dash direction for cuss.
                 {
                     float randomdir = crandom();
-                    if (randomdir <= 0 && randomdir > -0.2)
-                    {
-                        randomdir = -0.2;
-                    }
-                    else if (randomdir > 0 && randomdir < 0.2)
-                    {
-                        randomdir = 0.2;
-                    }
+                    if (randomdir < 0) 
+                        randomdir = -100 + 110 * randomdir;
+                    else 
+                        randomdir = 100 + 110 * randomdir;
 
-                    if (speed < 450 / 0.75) 
+                    if (speed < 450 / 0.75) // min speed = 450, 25% penalty for anything greater.
                         speed = 450;
-                    self.velocity = v_forward * speed * 0.75 + v_right * 200 * crandom();
-                    self.velocity_z = scale_z;
+                    else
+                        speed = speed * 0.75;
+
+                    self.velocity = v_forward * speed + v_right * randomdir + v_up * scale_z;
                 } 
-                else if (speed <= 450 / 0.9)   // 10% penalty = 450
-                {
-                    self.velocity = v_forward * 450;
-                    self.velocity_z = scale_z;
-                }
+                else if (speed <= speedcap)   // 10% penalty of 555.5 is 500.
+                    self.velocity = v_forward * 500 + v_up * scale_z;
                 else
-                {
-                    self.velocity = v_forward * speed * 0.9; // 10% speed speed penalty
-                    self.velocity_z = 210;
-                }
+                    self.velocity = v_forward * speed * 0.9 + v_up * 210; // 10% speed speed penalty
+                
                 break;
 
             case 3:
