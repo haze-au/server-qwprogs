@@ -35,16 +35,16 @@ void () CF_Scout_Dash = {
             case 2:
                 self.velocity_z = 0; // set to zero to avoid falling speed bonus
                 float speed    = vlen(self.velocity);
-                float speedcap = 500 / 0.9
+                float speedcap = 540 / 0.9;
                 float scale_z  = 210 + 110 * (1 - speed / speedcap);
 
                 if (self.is_concussed)  // Randomize dash direction for cuss.
                 {
                     float randomdir = crandom();
                     if (randomdir < 0) 
-                        randomdir = -100 + 110 * randomdir;
+                        randomdir = -80 + 100 * randomdir;
                     else 
-                        randomdir = 100 + 110 * randomdir;
+                        randomdir = 80 + 100 * randomdir;
 
                     if (speed < 450 / 0.75) // min speed = 450, 25% penalty for anything greater.
                         speed = 450;
@@ -53,15 +53,11 @@ void () CF_Scout_Dash = {
 
                     self.velocity = v_forward * speed + v_right * randomdir + v_up * scale_z;
                 } 
-                else if (speed <= speedcap)   // 10% penalty of 555.5 is 500.
-                    self.velocity = v_forward * 500 + v_up * scale_z;
+                else if (speed <= speedcap) // no penalty for not exceeding speedcap
+                    self.velocity = v_forward * 540 + v_up * scale_z;
                 else
                     self.velocity = v_forward * speed * 0.9 + v_up * 210; // 10% speed speed penalty
                 
-                break;
-
-            case 3:
-                self.velocity_z = 210;
                 break;
 
             default:
