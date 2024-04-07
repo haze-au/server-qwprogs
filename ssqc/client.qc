@@ -779,6 +779,9 @@ void () DecodeLevelParms = {
 
         map_restart_time = CF_GetSetting("map_restart_Time", "mrt", "120");
 
+        // if 1, quad round will not finish immediately if result is determined [off]
+        play_to_completion = CF_GetSetting("ptc", "play_to_completion", "0");
+
         // enforces login
         loginRequired = CF_GetSetting("loginrequired", "logreq", "0");
 

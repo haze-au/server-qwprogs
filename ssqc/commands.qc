@@ -1296,6 +1296,14 @@ float (string arg1, string arg2, string arg3) ParseCmds = {
                     UpdateAllAdmins();
                 }
                 break;
+            case "play_to_completion":
+                if(arg2 != "0" && arg2 != "1")
+                    return;
+
+                processedCmd = TRUE;
+                localcmd ("localinfo play_to_completion ",arg2,"\n");
+                UpdateAllAdmins();
+                break;
             case "captainmode":
                 processedCmd = TRUE;
                 if(arg2 && arg3) {

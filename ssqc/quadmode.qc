@@ -388,7 +388,7 @@ void () QuadRoundThink = {
 	local float fl;
 
 	if (rounds < 2) {
-		if (CheckWinningTeam() != 0) {
+		if (CheckWinningTeam() != 0 && !play_to_completion) {
 			if (quad_winner != CheckWinningTeam()) {
 				quad_winner = CheckWinningTeam();
 				self.think = QuadRoundOver;

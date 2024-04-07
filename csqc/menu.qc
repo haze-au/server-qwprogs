@@ -7,6 +7,7 @@ void (float force) FO_Menu_Admin_Timelimit;
 void (float force) FO_Menu_Admin_Fraglimit;
 void (float force) FO_Menu_Admin_QuadTimelimit;
 void (float force) FO_Menu_Admin_FoMatchRated;
+void (float force) FO_Menu_Admin_PlayToCompletion;
 void (float force) FO_Menu_Admin_NewBalance;
 void (float force) FO_Menu_Spy;
 void (float force) FO_Menu_Spy_Skin;
@@ -443,6 +444,7 @@ var fo_menu FO_MENU_ADMIN_MODES = {
         {"7","Rated/Unrated","","Will player ratings be affected?",FO_MENU_STATE_NORMAL,{FO_Menu_Admin_FoMatchRated(TRUE);},MENU_BORDER_WARNING},
         {"8","New Balance","","New Balance Test",FO_MENU_STATE_NORMAL,{localcmd("cmd new_balance");},MENU_BORDER_WARNING},
         {"9","Force Start","","Skip prematch and start the game\nPlease use sparingly",FO_MENU_STATE_NORMAL,{localcmd("cmd forcestart\n");},MENU_BORDER_WARNING},
+        MenuSpacer,
         {"0","Close Menu","","",FO_MENU_STATE_NORMAL,{Menu_Cancel();},MENU_BUTTON},
         {"+","Next - Settings","","",FO_MENU_STATE_NORMAL,{Menu_Cancel(); FO_Menu_Admin_Settings(TRUE);},MENU_BUTTON},
         {"-","Prev - Main","","",FO_MENU_STATE_NORMAL,{Menu_Cancel(); FO_Menu_Admin_Main(TRUE);},MENU_BUTTON},
@@ -463,9 +465,7 @@ var fo_menu FO_MENU_ADMIN_SETTINGS = {
         {"2","Fraglimit","","",FO_MENU_STATE_NORMAL,{FO_Menu_Admin_Fraglimit(TRUE);},MENU_BORDER_WARNING},
         {"3","Quad Rounds...","","Number of rounds in Quad mode. Usually 2",FO_MENU_STATE_NORMAL,{FO_Menu_Admin_Rounds(TRUE);},MENU_BORDER_WARNING},
         {"4","Quad Round Time...","","Round time for each quad round",FO_MENU_STATE_NORMAL,{FO_Menu_Admin_QuadTimelimit(TRUE);},MENU_BORDER_WARNING},
-        MenuSpacer,
-        MenuSpacer,
-        MenuSpacer,
+        {"5","Play To Completion","","Play match to end of round even if result decided",FO_MENU_STATE_NORMAL,{FO_Menu_Admin_PlayToCompletion(TRUE);},MENU_BORDER_WARNING},
         MenuSpacer,
         MenuSpacer,
         MenuSpacer,
@@ -479,6 +479,7 @@ var fo_menu FO_MENU_ADMIN_SETTINGS = {
         FO_MENU_ADMIN_SETTINGS.options[1].value = ftos(SERVER_ADMIN.fraglimit);
         FO_MENU_ADMIN_SETTINGS.options[2].value = ftos(SERVER_ADMIN.quad_rounds);
         FO_MENU_ADMIN_SETTINGS.options[3].value = ftos(SERVER_ADMIN.quad_round_time);
+        FO_MENU_ADMIN_SETTINGS.options[4].value = modeStatus(SERVER_ADMIN.play_to_completion);
     }
 };
 var void execute_admin_players(float choice, float page) {
@@ -619,6 +620,20 @@ var fo_menu FO_MENU_ADMIN_QUAD_TIMELIMIT = {
         MenuSpacer,
         {"0","Back to Main Menu","","",FO_MENU_STATE_NORMAL,{Menu_Cancel();FO_Menu_Admin_Modes(TRUE);},MENU_BUTTON},
     }, 11, TRUE
+};
+var fo_menu FO_MENU_ADMIN_PLAY_TO_COMPLETION = {
+    [0,0], [300,200], "Play to completion?", FO_MENU_FLAG_USE_MOUSE | FO_MENU_FLAG_CENTER | FO_MENU_FLAG_SHOW_SHORTCUTS | FO_MENU_FLAG_SHOW_VALUES | FO_MENU_FLAG_WARNING | FO_MENU_FLAG_ALLOW_INTERMISSION, {
+        {"1","No","","Match will end as soon as the winner is known",FO_MENU_STATE_NORMAL,{localcmd("cmd play_to_completion 0\n");FO_Menu_Admin_Settings(TRUE);},MENU_BORDER_WARNING},
+        {"2","Yes","","Match will end at the end of the final round",FO_MENU_STATE_NORMAL,{localcmd("cmd play_to_completion 1\n");FO_Menu_Admin_Settings(TRUE);},MENU_BORDER_WARNING},
+        MenuSpacer,
+        MenuSpacer,
+        MenuSpacer,
+        MenuSpacer,
+        MenuSpacer,
+        MenuSpacer,
+        MenuSpacer,
+        {"0","Back to Main Menu","","",FO_MENU_STATE_NORMAL,{Menu_Cancel();FO_Menu_Admin_Modes(TRUE);},MENU_BUTTON},
+    }, 10, TRUE
 };
 var fo_menu FO_MENU_ADMIN_MATCH_RATED = {
     [0,0], [300,200], "Match Rated?", FO_MENU_FLAG_USE_MOUSE | FO_MENU_FLAG_CENTER | FO_MENU_FLAG_SHOW_SHORTCUTS | FO_MENU_FLAG_SHOW_VALUES | FO_MENU_FLAG_WARNING | FO_MENU_FLAG_ALLOW_INTERMISSION, {
@@ -1215,6 +1230,12 @@ void FO_Menu_Admin_QuadTimelimit(float force) = {
     CurrentMenu = &FO_MENU_ADMIN_QUAD_TIMELIMIT;
     fo_hud_menu_active = TRUE;
 }
+void FO_Menu_Admin_PlayToCompletion(float force) = {
+    if(fo_hud_menu_active && !force)
+        return;
+    CurrentMenu = &FO_MENU_ADMIN_PLAY_TO_COMPLETION;
+    fo_hud_menu_active = TRUE;
+}
 void FO_Menu_Admin_FoMatchRated(float force) = {
     if(fo_hud_menu_active && !force)
         return;
@@ -1401,6 +1422,7 @@ void FO_Hud_Init() {
     INIT_MENU_IDS(FO_MENU_ADMIN_ROUNDS);
     INIT_MENU_IDS(FO_MENU_ADMIN_QUAD_TIMELIMIT);
     INIT_MENU_IDS(FO_MENU_ADMIN_MATCH_RATED);
+    INIT_MENU_IDS(FO_MENU_ADMIN_PLAY_TO_COMPLETION);
     INIT_MENU_IDS(FO_MENU_ADMIN_TIMELIMIT);
     INIT_MENU_IDS(FO_MENU_ADMIN_FRAGLIMIT);
     INIT_MENU_IDS(FO_MENU_VOTE);
