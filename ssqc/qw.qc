@@ -471,6 +471,7 @@ float round_delay_time;
 float round_start_time;
 float round_end_time;
 float map_restart_time;
+float play_to_completion;
 float gametime;
 float is_countdown;
 float duelmode;

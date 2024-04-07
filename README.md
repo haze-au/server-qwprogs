@@ -71,6 +71,7 @@ sound files are found in `fortress/sound/hitaudio/` and  `fortress/sound/announc
 * Website backend for match results, stats. Get a token at fortressone.org, connect to a FortressOne server, and `login <token>`.
 
 
+* `localinfo play_to_completion 0` set to 1 to allow quad to continue to round end even after required score exceeded.
 * `localinfo pipecooldown_time <number>` time in seconds for demo pipe cooldown
 * `localinfo allpipes_cooldown on/off` whether cooldown is applied to individual pipes or all pipes. i.e. with this on the demo can not det any of his pipes immediately after firing. (default off)
 * `localinfo discord_channel_id <number>` to specify discord_channel. Required for autoreporting.
