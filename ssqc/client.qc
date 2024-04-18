@@ -259,8 +259,8 @@ void ActivateOrgGame() {
     PC_PYRO_AIRBLAST_COOLDOWN = 10;
     PC_ENGINEER_GRENADE_TYPE_2_RANGE = 200;
 
-    float use_new_cap = CF_GetSetting("nbcc", "new_balance_conc_cap", "4");
-    if (use_new_cap == 4 && ServerRegion() == kRegionOCE)
+    float use_new_cap = CF_GetSetting("nbcc", "new_balance_conc_cap", "0");
+    if (use_new_cap == 4)
         use_new_cap = 1;
     else
         use_new_cap = 0;
